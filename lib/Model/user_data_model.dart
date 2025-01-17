@@ -149,7 +149,9 @@ class Result {
         replies: (json["replies"] == [] || json["replies"] == null)
             ? []
             : List<dynamic>.from(json["replies"].map((x) => x)),
-        stats: Stats.fromJson(json["stats"]),
+        stats: (json["stats"] != null && json["stats"].isNotEmpty)
+            ? Stats.fromJson(json["stats"])
+            : Stats(),
         title: json["title"] ?? "",
         updated: json["updated"] ?? "",
         url: json["url"] ?? "",
@@ -258,7 +260,7 @@ class JsonMetadata {
   Video? video;
   List<String>? thumbnails;
   String? community;
-  Flow? flow;
+  FlowData? flow;
 
   JsonMetadata({
     required this.app,
@@ -313,8 +315,9 @@ class JsonMetadata {
             : List<String>.from(json["choices"]!.map((x) => x)),
         contentType: json["content_type"] ?? "",
         endTime: json["end_time"] ?? 0,
-        filters:
-            json["filters"] == null ? null : Filters.fromJson(json["filters"]),
+        filters: (json["filters"] == null || json["filters"] == {})
+            ? Filters()
+            : Filters.fromJson(json["filters"]),
         preferredInterpretation: json["preferred_interpretation"] ?? "",
         question: json["question"] ?? "",
         uiHideResUntilVoted: json["ui_hide_res_until_voted"] ?? false,
@@ -328,12 +331,16 @@ class JsonMetadata {
             : List<dynamic>.from(json["images"]!.map((x) => x)),
         isPoll: json["isPoll"] ?? false,
         type: json["type"] ?? "",
-        video: json["video"] == null ? null : Video.fromJson(json["video"]),
+        video: (json["video"] == null || json["video"] == {})
+            ? null
+            : Video.fromJson(json["video"]),
         thumbnails: (json["thumbnails"] == null || json["thumbnails"] == [])
             ? []
             : List<String>.from(json["thumbnails"]!.map((x) => x)),
         community: json["community"] ?? "",
-        flow: json["flow"] == null ? null : Flow.fromJson(json["flow"]),
+        flow: (json["flow"] == null || json["flow"] == {})
+            ? FlowData()
+            : FlowData.fromJson(json["flow"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -380,10 +387,10 @@ class Dimensions {
 }
 
 class Filters {
-  int accountAge;
+  int? accountAge;
 
   Filters({
-    required this.accountAge,
+    this.accountAge,
   });
 
   factory Filters.fromJson(Map<String, dynamic> json) => Filters(
@@ -395,16 +402,16 @@ class Filters {
       };
 }
 
-class Flow {
-  List<Picture> pictures;
-  List<String> tags;
+class FlowData {
+  List<Picture>? pictures;
+  List<String>? tags;
 
-  Flow({
-    required this.pictures,
-    required this.tags,
+  FlowData({
+    this.pictures,
+    this.tags,
   });
 
-  factory Flow.fromJson(Map<String, dynamic> json) => Flow(
+  factory FlowData.fromJson(Map<String, dynamic> json) => FlowData(
         pictures: (json["pictures"] == null || json["pictures"] == [])
             ? []
             : List<Picture>.from(
@@ -415,8 +422,8 @@ class Flow {
       );
 
   Map<String, dynamic> toJson() => {
-        "pictures": List<dynamic>.from(pictures.map((x) => x.toJson())),
-        "tags": List<dynamic>.from(tags.map((x) => x)),
+        "pictures": List<dynamic>.from(pictures!.map((x) => x.toJson())),
+        "tags": List<dynamic>.from(tags!.map((x) => x)),
       };
 }
 
@@ -459,12 +466,12 @@ class Picture {
 }
 
 class Video {
-  Content content;
-  Info info;
+  Content? content;
+  Info? info;
 
   Video({
-    required this.content,
-    required this.info,
+    this.content,
+    this.info,
   });
 
   factory Video.fromJson(Map<String, dynamic> json) => Video(
@@ -473,18 +480,18 @@ class Video {
       );
 
   Map<String, dynamic> toJson() => {
-        "content": content.toJson(),
-        "info": info.toJson(),
+        "content": content?.toJson(),
+        "info": info?.toJson(),
       };
 }
 
 class Content {
-  String description;
-  List<String> tags;
+  String? description;
+  List<String>? tags;
 
   Content({
-    required this.description,
-    required this.tags,
+    this.description,
+    this.tags,
   });
 
   factory Content.fromJson(Map<String, dynamic> json) => Content(
@@ -496,7 +503,7 @@ class Content {
 
   Map<String, dynamic> toJson() => {
         "description": description,
-        "tags": List<dynamic>.from(tags.map((x) => x)),
+        "tags": List<dynamic>.from(tags!.map((x) => x)),
       };
 }
 
@@ -592,17 +599,17 @@ class SourceMap {
 }
 
 class Stats {
-  double flagWeight;
-  bool gray;
-  bool hide;
-  int totalVotes;
+  double? flagWeight;
+  bool? gray;
+  bool? hide;
+  int? totalVotes;
   bool? isPinned;
 
   Stats({
-    required this.flagWeight,
-    required this.gray,
-    required this.hide,
-    required this.totalVotes,
+    this.flagWeight,
+    this.gray,
+    this.hide,
+    this.totalVotes,
     this.isPinned,
   });
 

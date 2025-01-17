@@ -6,7 +6,6 @@ import 'package:list_app/Screen/stats_data_screen.dart';
 import '../Model/user_data_model.dart';
 import '../Utils/common_code .dart';
 import '../Widget/custome_button.dart';
-import '../Widget/user_list_widget.dart';
 import 'active_voter_list_screen.dart';
 import 'black_list_screen.dart';
 import 'json_metadata_screen.dart';
@@ -160,11 +159,6 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                         btnName: "Extra Json Meta Data",
                         btnSecond: "Stats Data"),
                     CustomButtonWidgrt(
-                        onTap: () => clickOnStatsData(args!.stats),
-                        onTap2: () => clickOnActiveVoter(args!.activeVotes),
-                        btnName: "Active Voter List",
-                        btnSecond: "Beneficiary List"),
-                    CustomButtonWidgrt(
                         onTap: () => clickOnActiveVoter(args!.activeVotes),
                         onTap2: () =>
                             clickOnBeneficiaryList(args!.beneficiaries),
@@ -215,9 +209,9 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
         Expanded(
           flex: 60,
           child: Text(
-            secondName!.toUpperCase() ?? "NA",
+            secondName!.toUpperCase(),
             textAlign: TextAlign.end,
-            maxLines: secondName!.length <= 20 ? 2 : 10,
+            maxLines: secondName.length <= 20 ? 2 : 10,
             overflow: TextOverflow.ellipsis,
             style: CommonTextStyle().boldBodyMedium(context, FontWeight.w400),
           ),

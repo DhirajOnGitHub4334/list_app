@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:list_app/Screen/flow_screen.dart';
+import 'package:list_app/Screen/video_screen.dart';
 import 'package:list_app/Utils/common_code%20.dart';
 
 import '../Model/user_data_model.dart';
@@ -32,6 +34,7 @@ class _JsonMetaDataScreenState extends State<JsonMetaDataScreen> {
     setState(() {
       clickNum = 1;
     });
+    log("Click On Link : $clickNum");
   }
 
   void clickOnTags(List<String> tagsList) {
@@ -41,6 +44,7 @@ class _JsonMetaDataScreenState extends State<JsonMetaDataScreen> {
     setState(() {
       clickNum = 2;
     });
+    log("Click On Link : $clickNum");
   }
 
   void clickOnUser(List<String> userList) {
@@ -50,16 +54,17 @@ class _JsonMetaDataScreenState extends State<JsonMetaDataScreen> {
     setState(() {
       clickNum = 3;
     });
+    log("Click On Link : $clickNum");
   }
 
   void clickOnLinks(List<String> linksList) {
-    log("Click On Link : $clickNum");
     for (String link in linksList) {
       listOfLinks.add(link);
     }
     setState(() {
       clickNum = 4;
     });
+    log("Click On Link : $clickNum");
   }
 
   void clickOnImageRatios(List<String> imageRatios) {
@@ -69,6 +74,7 @@ class _JsonMetaDataScreenState extends State<JsonMetaDataScreen> {
     setState(() {
       clickNum = 5;
     });
+    log("Click On Link : $clickNum");
   }
 
   void clickOnChoices(List<String> choiceList) {
@@ -78,6 +84,7 @@ class _JsonMetaDataScreenState extends State<JsonMetaDataScreen> {
     setState(() {
       clickNum = 6;
     });
+    log("Click On Link : $clickNum");
   }
 
   void clickOnImages(List<dynamic> images) {
@@ -87,6 +94,7 @@ class _JsonMetaDataScreenState extends State<JsonMetaDataScreen> {
     setState(() {
       clickNum = 7;
     });
+    log("Click On Link : $clickNum");
   }
 
   void clickOnThumbnails(List<String> thumbNailsList) {
@@ -96,11 +104,32 @@ class _JsonMetaDataScreenState extends State<JsonMetaDataScreen> {
     setState(() {
       clickNum = 8;
     });
+    log("Click On Link : $clickNum");
+  }
+
+  void clickOnVideo(Video? video) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const VideoScreen(),
+        settings: RouteSettings(arguments: video),
+      ),
+    );
+  }
+
+  void clickOnFlow(FlowData? flows) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const FlowScreen(),
+        settings: RouteSettings(arguments: flows),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    var args = ModalRoute.of(context)?.settings.arguments as JsonMetadata;
+    var args = ModalRoute.of(context)?.settings.arguments as JsonMetadata?;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Json Meta Data"),
@@ -116,7 +145,7 @@ class _JsonMetaDataScreenState extends State<JsonMetaDataScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    buildRowWiget("App : ", args.app),
+                    buildRowWiget("App : ", args!.app),
                     buildRowWiget("Format : ", args.format),
                     buildRowWiget(
                         "Description : ", args.description.toString()),
@@ -155,11 +184,48 @@ class _JsonMetaDataScreenState extends State<JsonMetaDataScreen> {
                         onTap2: () => clickOnThumbnails(args.thumbnails!),
                         btnName: "Images",
                         btnSecond: "Thumbnails"),
+                    CustomButtonWidgrt(
+                        onTap: () => clickOnVideo(args.video),
+                        onTap2: () => clickOnFlow(args.flow!),
+                        btnName: "Video",
+                        btnSecond: "Flow"),
                   ],
                 ),
               ),
             ),
           ),
+          if (clickNum == 1 && listOfImageUrl.isEmpty)
+            Expanded(
+              child: CommonTextStyle.commonData("No Image url Exist."),
+            ),
+          if ((clickNum == 2 && listOfTags.isEmpty))
+            Expanded(
+              child: CommonTextStyle.commonData("No List Tags Exist."),
+            ),
+          if (clickNum == 3 && listOfUser.isEmpty)
+            Expanded(
+              child: CommonTextStyle.commonData("No User list Exist."),
+            ),
+          if (clickNum == 4 && listOfLinks.isEmpty)
+            Expanded(
+              child: CommonTextStyle.commonData("No Link list Exist."),
+            ),
+          if ((clickNum == 5 && listOfImageRatios.isEmpty))
+            Expanded(
+              child: CommonTextStyle.commonData("No Image Ratios Exist."),
+            ),
+          if (clickNum == 6 && listOfchoices.isEmpty)
+            Expanded(
+              child: CommonTextStyle.commonData("No Choice List Exist."),
+            ),
+          if (clickNum == 7 && listOfimages.isEmpty)
+            Expanded(
+              child: CommonTextStyle.commonData("No Images List Exist."),
+            ),
+          if (clickNum == 8 && listOfThumbnails.isEmpty)
+            Expanded(
+              child: CommonTextStyle.commonData("No ThumbNails Exist."),
+            ),
           (clickNum == 0)
               ? Expanded(
                   child: CommonTextStyle.commonData(
@@ -185,99 +251,52 @@ class _JsonMetaDataScreenState extends State<JsonMetaDataScreen> {
                                                   ? listOfimages.length
                                                   : listOfThumbnails.length,
                       itemBuilder: (context, index) {
-                        return (clickNum == 1 && listOfImageUrl.isEmpty)
-                            ? Expanded(
-                                child: CommonTextStyle.commonData(
-                                    "No Image url Exist."),
-                              )
-                            : (clickNum == 2 && listOfTags.isEmpty)
-                                ? Expanded(
-                                    child: CommonTextStyle.commonData(
-                                        "No List Tags Exist."),
-                                  )
-                                : (clickNum == 3 && listOfUser.isEmpty)
-                                    ? Expanded(
-                                        child: CommonTextStyle.commonData(
-                                            "No User list Exist."),
-                                      )
-                                    : (clickNum == 4 && listOfLinks.isEmpty)
-                                        ? Expanded(
-                                            child: CommonTextStyle.commonData(
-                                                "No Link list Exist."),
-                                          )
-                                        : (clickNum == 5 &&
-                                                listOfImageRatios.isEmpty)
-                                            ? Expanded(
-                                                child: CommonTextStyle.commonData(
-                                                    "No Image Ratios Exist."),
-                                              )
-                                            : (clickNum == 6 &&
-                                                    listOfchoices.isEmpty)
-                                                ? Expanded(
-                                                    child: CommonTextStyle
-                                                        .commonData(
-                                                            "No Choice List Exist."),
-                                                  )
-                                                : (clickNum == 7 &&
-                                                        listOfimages.isEmpty)
-                                                    ? Expanded(
-                                                        child: CommonTextStyle
-                                                            .commonData(
-                                                                "No Images List Exist."),
-                                                      )
-                                                    : (clickNum == 8 &&
-                                                            listOfThumbnails
-                                                                .isEmpty)
-                                                        ? Expanded(
-                                                            child: CommonTextStyle
-                                                                .commonData(
-                                                                    "No ThumbNails Exist."),
-                                                          )
-                                                        : Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .symmetric(
-                                                                    horizontal:
-                                                                        10,
-                                                                    vertical:
-                                                                        2),
-                                                            child: Card(
-                                                              child: Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        8.0),
-                                                                child: Text(
-                                                                  (clickNum ==
-                                                                          1)
-                                                                      ? listOfImageUrl[
-                                                                              index]
-                                                                          .characters
-                                                                          .toString()
-                                                                      : (clickNum ==
-                                                                              2)
-                                                                          ? listOfTags[index]
-                                                                              .characters
-                                                                              .toString()
-                                                                          : (clickNum == 3)
-                                                                              ? listOfUser[index].characters.toString()
-                                                                              : (clickNum == 4)
-                                                                                  ? listOfLinks[index].characters.toString()
-                                                                                  : (clickNum == 5)
-                                                                                      ? listOfImageRatios[index].characters.toString()
-                                                                                      : (clickNum == 6)
-                                                                                          ? listOfchoices[index].characters.toString()
-                                                                                          : (clickNum == 6)
-                                                                                              ? listOfimages[index].characters.toString()
-                                                                                              : listOfThumbnails[index].characters.toString(),
-                                                                  style: CommonTextStyle().boldBodyMedium(
-                                                                      context,
-                                                                      FontWeight
-                                                                          .bold),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          );
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 2),
+                          child: Card(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                (clickNum == 1)
+                                    ? listOfImageUrl[index]
+                                        .characters
+                                        .toString()
+                                    : (clickNum == 2)
+                                        ? listOfTags[index]
+                                            .characters
+                                            .toString()
+                                        : (clickNum == 3)
+                                            ? listOfUser[index]
+                                                .characters
+                                                .toString()
+                                            : (clickNum == 4)
+                                                ? listOfLinks[index]
+                                                    .characters
+                                                    .toString()
+                                                : (clickNum == 5)
+                                                    ? listOfImageRatios[index]
+                                                        .characters
+                                                        .toString()
+                                                    : (clickNum == 6)
+                                                        ? listOfchoices[index]
+                                                            .characters
+                                                            .toString()
+                                                        : (clickNum == 7)
+                                                            ? listOfimages[
+                                                                    index]
+                                                                .characters
+                                                                .toString()
+                                                            : listOfThumbnails[
+                                                                    index]
+                                                                .characters
+                                                                .toString(),
+                                style: CommonTextStyle()
+                                    .boldBodyMedium(context, FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        );
                       },
                     ),
                   ),
@@ -286,40 +305,6 @@ class _JsonMetaDataScreenState extends State<JsonMetaDataScreen> {
       ),
     );
   }
-
-  // Widget buildTextButtonWidget(
-  //   Function() onTap,
-  //   Function() onTap2,
-  //   String btnName,
-  //   String btnSecond,
-  // ) {
-  //   return Row(
-  //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //     children: [
-  //       Expanded(
-  //         flex: 40,
-  //         child: ElevatedButton.icon(
-  //           onPressed: onTap,
-  //           icon: const Icon(
-  //             Icons.send,
-  //           ),
-  //           label: Text(btnName),
-  //         ),
-  //       ),
-  //       const SizedBox(width: 10),
-  //       Expanded(
-  //         flex: 40,
-  //         child: ElevatedButton.icon(
-  //           onPressed: onTap2,
-  //           icon: const Icon(
-  //             Icons.send,
-  //           ),
-  //           label: Text(btnSecond),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
 
   Widget buildRowWiget(String firstName, String first) {
     return Row(
